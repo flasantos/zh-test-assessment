@@ -1,0 +1,35 @@
+name: Spot price Web Application
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    pull_requests:
+      branches:
+        - master
+        - main
+
+env:
+  CURRENCY_IMAGE: zh-test-assessment/spot-price:1.0.0
+
+jobs:
+  container-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+      - name: Install pre requisites for unit tests
+        run: |
+          pip install pytest
+          pip install -r requirements.txt
+      - name: Run unit tests
+        run: |
+          python -m pytest
+      - name: Build docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: ${{ env.CURRENCY_IMAGE }}

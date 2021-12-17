@@ -20,4 +20,4 @@ class Currency(Resource):
 
             return response.json(), response.status_code
         except json.decoder.JSONDecodeError:
-            return {'error': 'Invalid json response!'}, 500
+            return {'error': 'invalid json response'}, 500
